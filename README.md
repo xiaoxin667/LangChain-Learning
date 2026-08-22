@@ -1,4 +1,7 @@
 ## LangChain框架学习笔记
+
+> 🔗 **GitHub 仓库**：https://github.com/lonely-square-three/LangChain-Learning （本仓库与 GitHub 双端同步更新）
+
 ```angular2html
 本项目使用Python版本：3.12.x
 ```
