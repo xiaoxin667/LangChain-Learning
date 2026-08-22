@@ -1,6 +1,5 @@
 import os
-
-from langchain_classic.chains.question_answering.map_rerank_prompt import output_parser
+import json
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_classic.output_parsers import ResponseSchema, StructuredOutputParser
@@ -26,7 +25,7 @@ def get_messages(chat: ChatOpenAI,template_string,text,format_instructions):
 def get_response(chat,messages):
     return chat.invoke(messages)
 
-def get_format_instructions():
+def get_output_parsers():
     gift_schema = ResponseSchema(name="gift",
                                  description="Was the item purchased as a gift for someone else? Answer True if yes, False if not or unknown.")
     delivery_days_schema = ResponseSchema(name="delivery_days",
@@ -35,7 +34,7 @@ def get_format_instructions():
                                         description="Extract any sentences about the value or price")
     response_schema = [gift_schema, delivery_days_schema, price_value_schema]
     output_parsers = StructuredOutputParser.from_response_schemas(response_schema)
-    return output_parsers.get_format_instructions()
+    return output_parsers
 
 if __name__ == '__main__':
     template_string = """\
@@ -63,11 +62,14 @@ if __name__ == '__main__':
 
     # 整合模版
     chat = chat_init()
-    messages = get_messages(chat,template_string,text,get_format_instructions())
-    response = get_response(chat,messages)
 
-    output_dict = output_parser.parse(response.content)
+    output_parsers = get_output_parsers()
+    messages = get_messages(chat,template_string,text,output_parsers.get_format_instructions())
+    response = get_response(chat,messages)
+    output_dict = output_parsers.parse(response.content)
+
+    print(output_dict)
 
     # 写入文件夹
     with open("LangChain/01.json","w",encoding="utf-8") as f:
-        output_dict.
+        json.dump(output_dict,f)
