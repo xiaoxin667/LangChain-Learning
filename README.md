@@ -19,6 +19,10 @@
 - [03 链（Chains）](03_LangChain_Chains.md)（对应 `03_LangChain_Chains.ipynb`）
 - [04 基于文档问答（RAG）](04_LangChain_Response.md)（对应 `04_LangChain_Response.ipynb`）
 
+## 实战项目
+
+- [综测问答助手](app/README.md)（`app/`）：把 04 章的 RAG 落地成可用的本地问答助手，支持 PDF / Word / txt 等多种文档格式，带网页界面
+
 ## 知识概览
 
 这条学习路径的本质，是从"单次调用模型"逐步走向"围绕模型搭一套应用框架"。
