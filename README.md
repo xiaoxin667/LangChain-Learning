@@ -1,6 +1,6 @@
 # LangChain 框架学习笔记
 
-基于 LangChain（1.x 新版包结构）+ DeepSeek API 的学习实践仓库，共四个 Jupyter notebook，从"如何调用模型"一步步走到"基于文档的问答（RAG）"。每个 notebook 的知识点单独成文，README 只做整体概览。
+基于 LangChain（1.x 新版包结构）的学习实践仓库，共五个 Jupyter notebook，从"如何调用模型"一步步走到"基于文档的问答（RAG）"和"LLM 应用评估"。全部知识点整合在 `00_LangChain_all_notes.md` 一个文件里，README 只做整体概览。
 
 > 🔗 **GitHub 仓库**：https://github.com/lonely-square-three/LangChain-Learning （本仓库与 Gitee 双端同步更新）
 
@@ -8,20 +8,19 @@
 
 - Python 3.12.x
 - 依赖包：`langchain-openai`、`langchain-classic`、`langchain-core`、`openai`、`jupyter`
-- 生成模型：DeepSeek（`deepseek-v4-flash`）。DeepSeek 的 API 兼容 OpenAI 协议，直接用 `ChatOpenAI` 指定 `base_url="https://api.deepseek.com"` 即可，无需专用类
+- 生成模型：DeepSeek（`deepseek-v4-flash`，API 兼容 OpenAI 协议，用 `ChatOpenAI` 指定 `base_url` 即可）；第 05 章起改用本地 Ollama（`qwen3.5:2b` 生成 + `qwen3-embedding:0.6b` 向量化），不依赖云端余额
 - Embedding 模型：阿里云百炼（DashScope）Qwen 接口，仅第 04 章使用（DeepSeek 没有 embedding 接口）
 - 密钥从环境变量读取（`DEEPSEEK_API_KEY` 等），不在代码中硬编码
 
 ## 笔记导航
 
-- [01 提示词工程：原生 SDK 对比 LangChain](01_LangChain_diff.md)（对应 `01_LangChain_diff.ipynb`）
-- [02 会话记忆管理](02_LangChain_Memory.md)（对应 `02_LangChain_Memory.ipynb`）
-- [03 链（Chains）](03_LangChain_Chains.md)（对应 `03_LangChain_Chains.ipynb`）
-- [04 基于文档问答（RAG）](04_LangChain_Response.md)（对应 `04_LangChain_Response.ipynb`）
+全部知识点在 [00_LangChain_all_notes.md](00_LangChain_all_notes.md) 一个文件中，按章节对应五个 notebook：
 
-## 实战项目
-
-- [综测问答助手](app/README.md)（`app/`）：把 04 章的 RAG 落地成可用的本地问答助手，支持 PDF / Word / txt 等多种文档格式，带网页界面
+- 01 提示词工程：原生 SDK 对比 LangChain（`01_LangChain_diff.ipynb`）
+- 02 会话记忆管理（`02_LangChain_Memory.ipynb`）
+- 03 链（Chains）（`03_LangChain_Chains.ipynb`）
+- 04 基于文档问答（RAG）（`04_LangChain_Response.ipynb`）
+- 05 LLM 应用评估（`05_LangChain_assess.ipynb`）
 
 ## 知识概览
 
@@ -35,7 +34,9 @@
 
 **第 04 章解决"文档太大塞不进上下文"**。引入 RAG：文档切块 → embedding 向量化 → 存进向量库；查询时问题同样向量化，按相似度取最相关的几块，连同问题一起交给 LLM 生成答案。全链路既可一键（`VectorstoreIndexCreator`）也可拆开手动执行，`RetrievalQA` 链支持 stuff、map_reduce、refine、map_rerank 四种组合策略。
 
-贯穿四章的一条主线是**分工**：生成模型负责"写答案"，embedding 模型负责"理解与检索"，链负责"编排"，记忆负责"上下文"。学习时建议顺着 01 → 04 的顺序跑通代码，再回头看各章笔记复习原理。
+**第 05 章解决"效果好不好怎么知道"**。引入 LLM 应用评估：手工少量 + `QAGenerateChain` 自动批量生成测试问答对，跑出 predictions 后用 `QAEvalChain` 让另一个 LLM 当阅卷员——因为答案表述不唯一，字符串匹配会把正确答案判错，评估本身也要靠语言模型理解语义。`set_debug(True)` 可完整查看链每一步实际传给模型的 Prompt。全章已切换为本地 Ollama 模型运行。
+
+贯穿五章的一条主线是**分工**：生成模型负责"写答案"，embedding 模型负责"理解与检索"，链负责"编排"，记忆负责"上下文"，评估链负责"阅卷"。学习时建议顺着 01 → 05 的顺序跑通代码，再回头看各章笔记复习原理。
 
 ## 学习进度
 
@@ -45,5 +46,6 @@
 - [x] 会话记忆：完整历史 / 滑动窗口 / token 裁剪 / 超限自动摘要
 - [x] 链：LLMChain、SimpleSequentialChain、SequentialChain、MultiPromptChain 路由链
 - [x] 文档问答（RAG）：embedding + 向量存储 + `RetrievalQA`，四种 chain_type 策略
+- [x] LLM 应用评估：`QAGenerateChain` 自动生成测试用例、`QAEvalChain` LLM 评分、`set_debug` 调试、本地 Ollama 模型接入
 
 > 注：`ConversationChain`、Memory 系列、`RetrievalQA` 等类来自 `langchain_classic`（旧版 API，官方已标记弃用，2.0 将移除），此处用于理解机制原理；新项目应使用 `create_agent` + checkpointer 等新式 API。
