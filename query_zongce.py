@@ -6,7 +6,6 @@
 """
 
 from app.answer_question import query_zongce
-from IPython.display import Markdown, display
 
 
 def main():
@@ -39,19 +38,13 @@ def main():
             print("=" * 60)
             
             result = query_zongce(question)
-            
+
             # 输出结果
             print("\n" + "=" * 60)
             print("📋 查询结果：\n")
             print(result)
             print("\n" + "=" * 60)
-            
-            # 如果在 Jupyter 环境中，尝试渲染 Markdown
-            try:
-                display(Markdown(result))
-            except:
-                pass  # 非 Jupyter 环境忽略
-            
+
         except KeyboardInterrupt:
             print("\n\n👋 检测到中断，退出程序")
             break

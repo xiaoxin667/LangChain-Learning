@@ -5,15 +5,18 @@
 ```
 F:\LangChain\
 ├── app/
-│   ├── answer_question.py      # 核心检索问答模块（已更新）
-│   ├── load_llm.py            # LLM 加载模块
-│   ├── io.py                  # 文档加载模块
-│   ├── environ.py             # 环境变量配置
-│   ├── query_prompt_template.md  # 提示词模板参考
+│   ├── answer_question.py      # 核心检索问答模块
+│   ├── load_llm.py             # LLM 加载模块（DeepSeek）
+│   ├── io.py                   # 文档加载模块（加密 PDF）
+│   ├── environ.py              # 环境变量配置（支持 .env）
+│   ├── app.py                  # Gradio 网页界面
+│   ├── build_index.py          # 建索引 + 检索质量自检
+│   ├── requirements.txt        # 依赖清单
+│   ├── query_prompt_template.md  # 提示词模板（实际加载使用）
 │   └── file/
-│       └── data.pdf           # 综测规则文档
-├── query_zongce.py            # 独立查询脚本
-└── README_ZONGCE.md           # 本说明文档
+│       └── data.pdf            # 综测规则文档
+├── query_zongce.py             # 独立查询脚本（命令行交互）
+└── README_ZONGCE.md            # 本说明文档
 ```
 
 ## 🚀 快速开始
@@ -83,19 +86,11 @@ llm = ChatOpenAI(
 
 ### 2. 嵌入模型配置
 
-默认使用本地 Ollama 嵌入模型。确保 Ollama 服务已启动，并已下载嵌入模型：
-
-```bash
-ollama pull ryanshillington/Qwen3-Embedding-8B:latest
-```
+默认使用阿里云百炼 DashScope 的轻量 Qwen embedding（与 04 notebook 配置一致），无需本地模型，只需配置 `QWEN_API_KEY` 环境变量。如需修改模型，编辑 `app/answer_question.py` 的 `get_embeddings()`。
 
 ### 3. 文档路径配置
 
-如需更改综测规则文档路径，请修改 `app/io.py`：
-
-```python
-file = r"your\pdf\file\path.pdf"
-```
+如需更改综测规则文档路径，请修改 `app/io.py`。
 
 ## 📝 输出格式说明
 
@@ -115,9 +110,8 @@ file = r"your\pdf\file\path.pdf"
 - 确认文档路径和密码配置正确
 
 ### Q2: 响应速度很慢？
-- 检查 Ollama 服务是否正常运行
-- 确认网络连接正常（使用 DeepSeek API 时）
-- 考虑使用更快的模型或减少文档大小
+- 首次提问会为整份 PDF 建向量索引，慢属正常，之后复用索引
+- 确认网络连接正常（DeepSeek / DashScope 均为在线 API）
 
 ### Q3: 输出格式不正确？
 - 检查 LLM 是否支持 Markdown 输出
@@ -131,10 +125,9 @@ file = r"your\pdf\file\path.pdf"
    pip install -r requirements.txt
    ```
 
-2. **Ollama 连接失败**
-   ```bash
-   ollama serve  # 启动 Ollama 服务
-   ```
+2. **Embedding 调用失败（401 / 限流）**
+   - 检查 `QWEN_API_KEY` 环境变量是否设置且有效
+   - DashScope 单次最多 20 条文本，代码中已通过 `chunk_size=20` 处理
 
 3. **PDF 解密失败**
    - 检查 `PDF_DATA_KEY` 环境变量是否设置
@@ -144,11 +137,10 @@ file = r"your\pdf\file\path.pdf"
 
 如遇问题，请检查：
 1. Python 版本 >= 3.10
-2. 所有依赖包已安装
-3. Ollama 服务正常运行
-4. API 密钥配置正确
+2. 所有依赖包已安装（`pip install -r app/requirements.txt`）
+3. `DEEPSEEK_API_KEY`、`QWEN_API_KEY`、`PDF_DATA_KEY` 配置正确
 
 ---
 
-**更新日期**：2026-08-24  
-**版本**：1.0.0
+**更新日期**：2026-08-29  
+**版本**：1.1.0

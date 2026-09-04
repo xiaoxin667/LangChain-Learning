@@ -29,7 +29,7 @@ def get_conversation(llm):
 if __name__ == '__main__':
     llm = create_llm()
     conversation = get_conversation(llm)
-    result1 = conversation.predict(input="Hi my name is Jasmine")
+    result1 = conversation.predict(input="Hi my name is Hilary")
     print(result1)
 
     result2 = conversation.predict(input="What is my name")
