@@ -1,0 +1,16 @@
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Node
+node_modules/
+
+# 构建产物（.docx_build 中的脚本保留版本管理，生成结果不提交）
+.docx_build/preview/
+.docx_build/preview.pdf

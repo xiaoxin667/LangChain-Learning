@@ -1,6 +1,6 @@
 # LangChain 框架学习笔记
 
-基于 LangChain（1.x 新版包结构）的学习实践仓库，共五个 Jupyter notebook，从"如何调用模型"一步步走到"基于文档的问答（RAG）"和"LLM 应用评估"。全部知识点整合在 `00_LangChain_all_notes.md` 一个文件里，README 只做整体概览。
+基于 LangChain（1.x 新版包结构）的学习实践仓库，按 B 站课程合集（吴恩达 LangChain + LangGraph 四门课）分四个部分推进。第一部分的知识点整合在 `01_基于LangChain的大语言模型应用开发/00_LangChain_all_notes.md` 一个文件里，README 只做整体概览。
 
 > 🔗 **GitHub 仓库**：https://github.com/lonely-square-three/LangChain-Learning （本仓库与 Gitee 双端同步更新）
 
@@ -12,15 +12,20 @@
 - Embedding 模型：阿里云百炼（DashScope）Qwen 接口，仅第 04 章使用（DeepSeek 没有 embedding 接口）
 - 密钥从环境变量读取（`DEEPSEEK_API_KEY` 等），不在代码中硬编码
 
-## 笔记导航
+## 目录结构与笔记导航
 
-全部知识点在 [00_LangChain_all_notes.md](00_LangChain_all_notes.md) 一个文件中，按章节对应五个 notebook：
+按课程合集分四个部分，每个部分一个文件夹：
 
-- 01 提示词工程：原生 SDK 对比 LangChain（`01_LangChain_diff.ipynb`）
-- 02 会话记忆管理（`02_LangChain_Memory.ipynb`）
-- 03 链（Chains）（`03_LangChain_Chains.ipynb`）
-- 04 基于文档问答（RAG）（`04_LangChain_Response.ipynb`）
-- 05 LLM 应用评估（`05_LangChain_assess.ipynb`）
+- **`01_基于LangChain的大语言模型应用开发/`**（已学）：从"如何调用模型"到 RAG、评估、Agent。知识点整合在 [00_LangChain_all_notes.md](01_基于LangChain的大语言模型应用开发/00_LangChain_all_notes.md)，对应六个 notebook：
+  - 01 提示词工程：原生 SDK 对比 LangChain（`01_LangChain_diff.ipynb`）
+  - 02 会话记忆管理（`02_LangChain_Memory.ipynb`）
+  - 03 链（Chains）（`03_LangChain_Chains.ipynb`）
+  - 04 基于文档问答（RAG）（`04_LangChain_Response.ipynb`）
+  - 05 LLM 应用评估（`05_LangChain_assess.ipynb`）
+  - 06 Agent（`06_LangChain_Agents.ipynb`）
+- **`02_LangChain的功能工具和代理/`**（进行中）：函数调用、LCEL、标记提取、工具路由（P9–P16）
+- **`03_使用LangGraph进行长期代理记忆/`**：语义/情景/程序三层记忆（P17–P23）
+- **`04_LangGraph中的AI代理/`**：LangGraph 生产级 agent、human-in-the-loop（P24–P32）
 
 ## 知识概览
 
